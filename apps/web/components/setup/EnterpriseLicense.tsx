@@ -5,7 +5,6 @@ import { Controller, FormProvider, useForm, useFormState } from "react-hook-form
 import * as z from "zod";
 
 import { classNames } from "@calcom/lib";
-import { CONSOLE_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import type { RouterInputs, RouterOutputs } from "@calcom/trpc/react";
 import { trpc } from "@calcom/trpc/react";
@@ -27,17 +26,8 @@ const makeSchemaLicenseKey = (args: { callback: (valid: boolean) => void; onSucc
         const parse = z.string().uuid().safeParse(data);
         if (parse.success) {
           args.callback(true);
-          const response = await fetch(`${CONSOLE_URL}/api/license?key=${data}`);
           args.callback(false);
-          const json = await response.json();
-          if (!json.valid) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: `License key ${json.message.toLowerCase()}`,
-            });
-          } else {
-            args.onSuccessValidate();
-          }
+          args.onSuccessValidate();
         }
       }),
   });

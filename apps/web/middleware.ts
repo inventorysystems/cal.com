@@ -3,7 +3,7 @@ import { collectEvents } from "next-collect/server";
 import type { NextMiddleware } from "next/server";
 import { NextResponse, userAgent } from "next/server";
 
-import { CONSOLE_URL, WEBAPP_URL, WEBSITE_URL } from "@calcom/lib/constants";
+import { WEBAPP_URL, WEBSITE_URL } from "@calcom/lib/constants";
 import { isIpInBanlist } from "@calcom/lib/getIP";
 import { extendEventData, nextCollectBasicSettings } from "@calcom/lib/telemetry";
 
@@ -45,7 +45,7 @@ const middleware: NextMiddleware = async (req) => {
 
     if (
       isBot ||
-      (callbackUrl && ![CONSOLE_URL, WEBAPP_URL, WEBSITE_URL].some((u) => callbackUrl.startsWith(u))) ||
+      (callbackUrl && ![WEBAPP_URL, WEBSITE_URL].some((u) => callbackUrl.startsWith(u))) ||
       isIpInBanlist(req)
     ) {
       // DDOS Prevention: Immediately end request with no response - Avoids a redirect as well initiated by NextAuth on invalid callback

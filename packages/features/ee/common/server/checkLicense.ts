@@ -2,8 +2,6 @@ import type { PrismaClient } from "@prisma/client";
 import cache from "memory-cache";
 import { z } from "zod";
 
-import { CONSOLE_URL } from "@calcom/lib/constants";
-
 const CACHING_TIME = 86400000; // 24 hours in milliseconds
 
 const schemaLicenseKey = z
@@ -33,20 +31,7 @@ async function checkLicense(
     licenseKey = deployment?.licenseKey ?? undefined;
   }
   if (!licenseKey) return false;
-  const url = `${CONSOLE_URL}/api/license?key=${schemaLicenseKey.parse(licenseKey)}`;
-  const cachedResponse = cache.get(url);
-  if (cachedResponse) {
-    return cachedResponse;
-  } else {
-    try {
-      const response = await fetch(url, { mode: "cors" });
-      const data = await response.json();
-      cache.put(url, data.valid, CACHING_TIME);
-      return data.valid;
-    } catch (error) {
-      return false;
-    }
-  }
+  return true;
 }
 
 export default checkLicense;

@@ -4,7 +4,7 @@ import { Trans } from "next-i18next";
 import type { AriaRole, ComponentType } from "react";
 import React, { Fragment, useEffect } from "react";
 
-import { APP_NAME, CONSOLE_URL, SUPPORT_MAIL_ADDRESS, WEBAPP_URL } from "@calcom/lib/constants";
+import { APP_NAME, SUPPORT_MAIL_ADDRESS, WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { EmptyScreen, TopBanner } from "@calcom/ui";
 import { AlertTriangle } from "@calcom/ui/components/icon";
@@ -66,7 +66,7 @@ const LicenseRequired = ({ children, as = "", ...rest }: LicenseRequiredProps) =
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(
                   t("enterprise_license_description", {
-                    consoleUrl: `<a href="${CONSOLE_URL}" target="_blank" rel="noopener noreferrer" class="underline">
+                    consoleUrl: `<a href="https://oneshop.com" target="_blank" rel="noopener noreferrer" class="underline">
                 ${APP_NAME}
               </a>`,
                     setupUrl: `<a href="${WEBAPP_URL}/auth/setup" class="underline">/auth/setup</a>`,

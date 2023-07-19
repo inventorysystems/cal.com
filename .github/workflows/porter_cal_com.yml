@@ -43,3 +43,14 @@ jobs:
         PORTER_CLUSTER: 2444
         PORTER_PROJECT: 6657
         PORTER_TOKEN: ${{ secrets.PORTER_TOKEN_6657 }}
+
+    - name: Update cal-com-api App
+      timeout-minutes: 20
+      uses: porter-dev/porter-cli-action@v0.1.0
+      with:
+        command: update config --app cal-com-api --tag ${{ steps.vars.outputs.sha_short }} --stream
+      env:
+        PORTER_HOST: https://dashboard.getporter.dev
+        PORTER_CLUSTER: 2444
+        PORTER_PROJECT: 6657
+        PORTER_TOKEN: ${{ secrets.PORTER_TOKEN_6657 }}

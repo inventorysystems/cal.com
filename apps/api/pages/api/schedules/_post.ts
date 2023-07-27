@@ -106,16 +106,14 @@ async function postHandler(req: NextApiRequest) {
 
   const data = await prisma.schedule.create(args);
 
-  if (userId != null) {
-    await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        defaultScheduleId: data.id,
-      },
-    });
-  }
+  await prisma.user.update({
+    where: {
+      id: data.userId,
+    },
+    data: {
+      defaultScheduleId: data.id,
+    },
+  });
 
   return {
     schedule: schemaSchedulePublic.parse(data),

@@ -369,7 +369,9 @@ export default function Availability({ jwt }: PageProps) {
 
   React.useEffect(() => {
     Cookies.set('next-auth.session-token', jwt ?? '');
-    Cookies.set('__Secure-next-auth.session-token', jwt ?? '');
+    Cookies.set('__Secure-next-auth.session-token', jwt ?? '', {
+      secure: true,
+    });
     setCookieInjected(true)
   }, [jwt]);
 

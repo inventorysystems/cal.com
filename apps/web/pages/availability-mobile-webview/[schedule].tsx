@@ -44,6 +44,7 @@ import { Info, Plus, Trash, MoreHorizontal } from "@calcom/ui/components/icon";
 import PageWrapper from "@components/PageWrapper";
 import { SelectSkeletonLoader } from "@components/availability/SkeletonLoader";
 import EditableHeading from "@components/ui/EditableHeading";
+import { signOut } from 'next-auth/react';
 
 const querySchema = z.object({
   schedule: z.coerce.number().positive().optional(),
@@ -368,6 +369,7 @@ export default function Availability({ jwt }: PageProps) {
   const [cookieInjected, setCookieInjected] = React.useState(false);
 
   React.useEffect(() => {
+    signOut({redirect: false})
     Cookies.set('next-auth.session-token', jwt ?? '');
     Cookies.set('__Secure-next-auth.session-token', jwt ?? '', {
       secure: true,

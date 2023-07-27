@@ -279,7 +279,7 @@ const PublicShell = (props: LayoutProps) => {
 
 export default function Shell(props: LayoutProps) {
   // if a page is unauthed and isPublic is true, the redirect does not happen.
-  useRedirectToLoginIfUnauthenticated(props.isPublic);
+  // useRedirectToLoginIfUnauthenticated(props.isPublic);
   // useRedirectToOnboardingIfNeeded();
   // System Theme is automatically supported using ThemeProvider. If we intend to use user theme throughout the app we need to uncomment this.
   // useTheme(profile.theme);

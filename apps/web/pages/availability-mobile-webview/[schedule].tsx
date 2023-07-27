@@ -1,18 +1,23 @@
+import * as React from 'react';
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { encode, decode } from 'next-auth/jwt';
 import { z } from "zod";
 
+import Cookies from 'js-cookie';
 import dayjs from "@calcom/dayjs";
 import { DateOverrideInputDialog, DateOverrideList } from "@calcom/features/schedules";
 import Schedule from "@calcom/features/schedules/components/Schedule";
-import Shell from "@calcom/features/shell/Shell";
+import ShellWebView from "@calcom/features/shell/ShellWebView";
 import { availabilityAsString } from "@calcom/lib/availability";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { useTypedQuery } from "@calcom/lib/hooks/useTypedQuery";
 import { HttpError } from "@calcom/lib/http-error";
 import { trpc } from "@calcom/trpc/react";
 import useMeQuery from "@calcom/trpc/react/hooks/useMeQuery";
+import type { GetServerSidePropsContext } from "next";
+import type { inferSSRProps } from "@lib/types/inferSSRProps";
 import type { Schedule as ScheduleType, TimeRange, WorkingHours } from "@calcom/types/schedule";
 import {
   Button,
@@ -92,7 +97,9 @@ const DateOverride = ({ workingHours }: { workingHours: WorkingHours[] }) => {
   );
 };
 
-export default function Availability() {
+export type PageProps = inferSSRProps<typeof getServerSideProps>;
+
+export function AvailabilityWithJwt() {
   const { t, i18n } = useLocale();
   const router = useRouter();
   const utils = trpc.useContext();
@@ -161,7 +168,7 @@ export default function Availability() {
   });
 
   return (
-    <Shell
+    <ShellWebView
       backPath={fromEventType ? true : "/availability"}
       title={schedule?.name ? schedule.name + " | " + t("availability") : t("availability")}
       heading={
@@ -353,8 +360,71 @@ export default function Availability() {
           </div>
         </Form>
       </div>
-    </Shell>
+    </ShellWebView>
   );
 }
+
+export default function Availability({ jwt }: PageProps) {
+  const [cookieInjected, setCookieInjected] = React.useState(false);
+
+  React.useEffect(() => {
+    Cookies.set('next-auth.session-token', jwt ?? '');
+    Cookies.set('__Secure-next-auth.session-token', jwt ?? '');
+    setCookieInjected(true)
+  }, [jwt]);
+
+  if (!cookieInjected) {
+    return null;
+  }
+
+  return <AvailabilityWithJwt />
+}
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  let jwt = '';
+
+  const email = Array.isArray(context.query.email) ? context.query.email[0] : context.query.email;
+  const calcomUserId = Array.isArray(context.query.calcom_user_id) ? context.query.calcom_user_id[0] : context.query.calcom_user_id;
+  const username = Array.isArray(context.query.username) ? context.query.username[0] : context.query.username;
+
+  if (email == null || calcomUserId == null || username == null) {
+    return {
+      props: {
+        jwt: '',
+      }
+    }
+  }
+
+  const id = parseInt(calcomUserId);
+  const sub = id.toString();
+
+  if (isNaN(id)) {
+    return {
+      props: {
+        jwt: '',
+      }
+    }
+  }
+
+  if (process.env.NEXTAUTH_SECRET != null) {
+    jwt = await encode({
+      token: {
+        belongsToActiveTeam: false,
+        email,
+        id,
+        role: "USER",
+        sub,
+        username
+      },
+      secret: process.env.NEXTAUTH_SECRET
+    });
+  }
+
+  return {
+    props: {
+      jwt,
+    },
+  } as const;
+};
 
 Availability.PageWrapper = PageWrapper;

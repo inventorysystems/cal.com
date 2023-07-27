@@ -170,7 +170,6 @@ export function AvailabilityWithJwt() {
 
   return (
     <ShellWebView
-      backPath={fromEventType ? true : "/availability"}
       title={schedule?.name ? schedule.name + " | " + t("availability") : t("availability")}
       heading={
         <Controller
@@ -214,7 +213,6 @@ export function AvailabilityWithJwt() {
               }}
             />
           </div>
-
           <VerticalDivider className="hidden sm:inline" />
           <Dialog>
             <DialogTrigger asChild>
@@ -241,51 +239,6 @@ export function AvailabilityWithJwt() {
             </ConfirmationDialogContent>
           </Dialog>
           <VerticalDivider className="hidden sm:inline" />
-          <Dropdown>
-            <DropdownMenuTrigger asChild>
-              <Button className="sm:hidden" StartIcon={MoreHorizontal} variant="icon" color="secondary" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent style={{ minWidth: "200px" }}>
-              <DropdownItem
-                type="button"
-                color="destructive"
-                StartIcon={Trash}
-                onClick={() => setDeleteDialogOpen(true)}>
-                {t("delete")}
-              </DropdownItem>
-              <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <ConfirmationDialogContent
-                  isLoading={deleteMutation.isLoading}
-                  variety="danger"
-                  title={t("delete_schedule")}
-                  confirmBtnText={t("delete")}
-                  loadingText={t("delete")}
-                  onConfirm={() => {
-                    schedule !== undefined && deleteMutation.mutate({ scheduleId: schedule.id });
-                  }}>
-                  {t("delete_schedule_description")}
-                </ConfirmationDialogContent>
-              </Dialog>
-              <DropdownMenuSeparator />
-              <div className="flex h-9 flex-row items-center justify-between px-4 py-2 hover:bg-gray-100">
-                <Skeleton
-                  as={Label}
-                  htmlFor="hiddenSwitch"
-                  className="mt-2 cursor-pointer self-center pr-2 sm:inline">
-                  {t("set_to_default")}
-                </Skeleton>
-                <Switch
-                  id="hiddenSwitch"
-                  disabled={isLoading || schedule?.isDefault}
-                  checked={form.watch("isDefault")}
-                  onCheckedChange={(e) => {
-                    form.setValue("isDefault", e);
-                  }}
-                />
-              </div>
-            </DropdownMenuContent>
-          </Dropdown>
-
           <div className="border-default border-l-2" />
           <Button className="ml-4 lg:ml-0" type="submit" form="availability-form">
             {t("save")}

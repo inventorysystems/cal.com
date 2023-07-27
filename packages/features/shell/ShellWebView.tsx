@@ -201,10 +201,10 @@ const Layout = (props: LayoutProps) => {
       <TimezoneChangeDialog />
       <div className="flex min-h-screen flex-col">
         <div ref={bannerRef} className="sticky top-0 z-10 w-full divide-y divide-black">
-          <TeamsUpgradeBanner />
-          <OrgUpgradeBanner />
-          <ImpersonatingBanner />
-          <AdminPasswordBanner />
+          {/* <TeamsUpgradeBanner /> */}
+          {/* <OrgUpgradeBanner /> */}
+          {/* <ImpersonatingBanner /> */}
+          {/* <AdminPasswordBanner /> */}
           {/* <VerifyEmailBanner /> */}
         </div>
         <div className="flex flex-1" data-testid="dashboard-shell">
@@ -987,7 +987,7 @@ export function ShellMain(props: LayoutProps) {
               {props.CTA && (
                 <div
                   className={classNames(
-                    props.backPath
+                    true
                       ? "relative"
                       : "pwa:bottom-24 fixed bottom-20 z-40 ltr:right-4 rtl:left-4 md:z-auto md:ltr:right-0 md:rtl:left-0",
                     "flex-shrink-0 md:relative md:bottom-auto md:right-auto"
@@ -1016,13 +1016,13 @@ function MainContainer({
   return (
     <main className="bg-default relative z-0 flex-1 focus:outline-none">
       {/* show top navigation for md and smaller (tablet and phones) */}
-      {TopNavContainerProp}
+      {/* {TopNavContainerProp} */}
       <div className="max-w-full px-4 py-4 md:py-8 lg:px-12">
         <ErrorBoundary>
           {!props.withoutMain ? <ShellMain {...props}>{props.children}</ShellMain> : props.children}
         </ErrorBoundary>
         {/* show bottom navigation for md and smaller (tablet and phones) on pages where back button doesn't exist */}
-        {!props.backPath ? MobileNavigationContainerProp : null}
+        {/* {!props.backPath ? MobileNavigationContainerProp : null} */}
       </div>
     </main>
   );

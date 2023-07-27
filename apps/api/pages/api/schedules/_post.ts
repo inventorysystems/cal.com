@@ -2,7 +2,6 @@ import type { Prisma } from "@prisma/client";
 import type { NextApiRequest } from "next";
 
 import { DEFAULT_SCHEDULE, getAvailabilityFromSchedule } from "@calcom/lib/availability";
-import { HttpError } from "@calcom/lib/http-error";
 import { defaultResponder } from "@calcom/lib/server";
 
 import { schemaCreateScheduleBodyParams, schemaSchedulePublic } from "~/lib/validations/schedule";
@@ -79,7 +78,7 @@ import { schemaCreateScheduleBodyParams, schemaSchedulePublic } from "~/lib/vali
  */
 
 async function postHandler(req: NextApiRequest) {
-  const { userId, isAdmin, prisma } = req;
+  const { userId, prisma } = req;
   const body = schemaCreateScheduleBodyParams.parse(req.body);
   let args: Prisma.ScheduleCreateArgs = { data: { ...body, userId } };
 

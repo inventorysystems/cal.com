@@ -322,7 +322,7 @@ export default function Availability({ jwt }: PageProps) {
   const [cookieInjected, setCookieInjected] = React.useState(false);
 
   React.useEffect(() => {
-    signOut({redirect: false})
+    // signOut({redirect: false})
     Cookies.set('next-auth.session-token', jwt ?? '');
     Cookies.set('__Secure-next-auth.session-token', jwt ?? '', {
       secure: true,

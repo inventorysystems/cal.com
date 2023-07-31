@@ -322,12 +322,14 @@ export default function Availability({ jwt }: PageProps) {
   const [cookieInjected, setCookieInjected] = React.useState(false);
 
   React.useEffect(() => {
-    // signOut({redirect: false})
-    Cookies.set('next-auth.session-token', jwt ?? '');
-    Cookies.set('__Secure-next-auth.session-token', jwt ?? '', {
-      secure: true,
-    });
-    setCookieInjected(true)
+    (async () => {
+      await signOut({redirect: false})
+      Cookies.set('next-auth.session-token', jwt ?? '');
+      Cookies.set('__Secure-next-auth.session-token', jwt ?? '', {
+        secure: true,
+      });
+      setCookieInjected(true)
+    })()
   }, [jwt]);
 
   if (!cookieInjected) {

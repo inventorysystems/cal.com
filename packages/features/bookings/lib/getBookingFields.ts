@@ -225,21 +225,21 @@ export const ensureBookingInputsHaveSystemFields = ({
         },
       ],
     },
-    {
-      defaultLabel: "additional_guests",
-      type: "multiemail",
-      editable: "system-but-optional",
-      name: "guests",
-      required: false,
-      hidden: disableGuests,
-      sources: [
-        {
-          label: "Default",
-          id: "default",
-          type: "default",
-        },
-      ],
-    },
+    // {
+    //   defaultLabel: "additional_guests",
+    //   type: "multiemail",
+    //   editable: "system-but-optional",
+    //   name: "guests",
+    //   required: false,
+    //   hidden: disableGuests,
+    //   sources: [
+    //     {
+    //       label: "Default",
+    //       id: "default",
+    //       type: "default",
+    //     },
+    //   ],
+    // },
     {
       defaultLabel: "reason_for_reschedule",
       type: "textarea",

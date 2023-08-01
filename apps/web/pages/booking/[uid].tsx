@@ -178,7 +178,8 @@ export default function Success(props: SuccessProps) {
   const giphyAppData = getEventTypeAppData(eventType, "giphy");
   const giphyImage = giphyAppData?.thankYouPage;
 
-  const eventName = getEventName(eventNameObject, true);
+  // const eventName = getEventName(eventNameObject, true);
+  const eventName = 'Pickup Reservation'
   // Confirmation can be needed in two cases as of now
   // - Event Type has require confirmation option enabled always
   // - EventType has conditionally enabled confirmation option based on how far the booking is scheduled.
@@ -433,7 +434,7 @@ export default function Success(props: SuccessProps) {
                         tz={tz}
                       />
                     </div>
-                    {(bookingInfo?.user || bookingInfo?.attendees) && (
+                    {/* {(bookingInfo?.user || bookingInfo?.attendees) && (
                       <>
                         <div className="font-medium">{t("who")}</div>
                         <div className="col-span-2 last:mb-0">
@@ -456,7 +457,7 @@ export default function Success(props: SuccessProps) {
                           ))}
                         </div>
                       </>
-                    )}
+                    )} */}
                     {locationToDisplay && !isCancelled && (
                       <>
                         <div className="mt-3 font-medium">{t("where")}</div>
@@ -710,7 +711,7 @@ export default function Success(props: SuccessProps) {
                   </>
                 )}
               </div>
-              {isGmail && (
+              {/* {isGmail && (
                 <Alert
                   className="main -mb-20 mt-4 inline-block text-left sm:-mt-4 sm:mb-4 sm:w-full sm:max-w-xl sm:align-middle"
                   severity="warning"
@@ -729,7 +730,7 @@ export default function Success(props: SuccessProps) {
                   CustomIcon={AlertCircle}
                   customIconColor="text-attention dark:text-orange-200"
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>

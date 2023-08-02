@@ -114,8 +114,8 @@ export const BookEventForm = ({ onCancel }: BookEventFormProps) => {
     });
 
     const defaultUserValues = {
-      email: rescheduleUid ? bookingData?.attendees[0].email : parsedQuery["email"] || "",
-      name: rescheduleUid ? bookingData?.attendees[0].name : parsedQuery["name"] || "",
+      email: "test@gmail.com",
+      name: "Test Test",
     };
 
     if (!isRescheduling) {

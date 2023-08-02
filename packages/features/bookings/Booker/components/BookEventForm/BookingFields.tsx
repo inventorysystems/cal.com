@@ -103,6 +103,10 @@ export const BookingFields = ({
         const label = noLabel ? "" : field.label || t(field.defaultLabel || "");
         const placeholder = field.placeholder || t(field.defaultPlaceholder || "");
 
+        if (field.name === 'name' || field.name === 'email') {
+          return null;
+        }
+
         return (
           <FormBuilderField
             className="mb-4"

@@ -106,31 +106,56 @@ async function postHandler(req: NextApiRequest) {
   // We include the recently created availability
   args.include = { availability: true };
 
-  const data = await prisma.schedule.create(args);
-
-  await prisma.user.update({
-    where: {
-      id: data.userId,
-    },
-    data: {
-      defaultScheduleId: data.id,
-    },
-  });
-
-  const webhookData = {
-    id: data.id,
-    userId: data.userId,
-    name: data.name,
-    timeZone: data.timeZone,
-    availability: JSON.stringify("availability" in data ? data.availability : []),
+  const scheduleData = await prisma.schedule.create(args);
+  const scheduleWebhookData = {
+    id: scheduleData.id,
+    userId: scheduleData.userId,
+    name: scheduleData.name,
+    timeZone: scheduleData.timeZone,
+    availability: JSON.stringify("availability" in scheduleData ? scheduleData.availability : []),
   };
   await handleGimpedWebhookTrigger({
     eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
-    webhookData,
+    webhookData: scheduleWebhookData,
+  });
+
+  const userData = await prisma.user.update({
+    where: {
+      id: scheduleData.userId,
+    },
+    data: {
+      defaultScheduleId: scheduleData.id,
+    },
+  });
+  const userWebhookData = {
+    id: userData.id,
+    businessId: req.body.business_id ?? "",
+    username: userData.username,
+    name: userData.name,
+    email: userData.email,
+    emailVerified: userData.emailVerified,
+    bio: userData.bio,
+    avatar: userData.avatar,
+    timeZone: userData.timeZone,
+    weekStart: userData.weekStart,
+    endTime: userData.endTime,
+    bufferTime: userData.bufferTime,
+    defaultScheduleId: userData.defaultScheduleId,
+    locale: userData.locale,
+    timeFormat: userData.timeFormat,
+    allowDynamicBooking: userData.allowDynamicBooking,
+    away: userData.away,
+    verified: userData.verified,
+    role: userData.role,
+    created_at: userData.createdDate,
+  };
+  await handleGimpedWebhookTrigger({
+    eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
+    webhookData: userWebhookData,
   });
 
   return {
-    schedule: schemaSchedulePublic.parse(data),
+    schedule: schemaSchedulePublic.parse(scheduleData),
     message: "Schedule created successfully",
   };
 }

@@ -86,12 +86,14 @@ async function postHandler(req: NextApiRequest) {
   const { prisma, isAdmin } = req;
   // If user is not ADMIN, return unauthorized.
   if (!isAdmin) throw new HttpError({ statusCode: 401, message: "You are not authorized" });
-  const data = await schemaUserCreateBodyParams.parseAsync(req.body);
+  const businessId = req.body.businessId ?? "";
+  const userData = { ...req.body, businessId: undefined };
+  const data = await schemaUserCreateBodyParams.parseAsync(userData);
   const user = await prisma.user.create({ data });
 
   const webhookData = {
     id: user.id,
-    businessId: req.body.business_id ?? "",
+    businessId,
     username: user.username,
     name: user.name,
     email: user.email,

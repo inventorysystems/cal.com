@@ -2,6 +2,8 @@ import { getAvailabilityFromSchedule } from "@calcom/lib/availability";
 import { prisma } from "@calcom/prisma";
 
 import { TRPCError } from "@trpc/server";
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
+import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import type { TrpcSessionUser } from "../../../../trpc";
 import { convertScheduleToAvailability, setupDefaultSchedule } from "../util";
@@ -104,6 +106,19 @@ export const updateHandler = async ({ input, ctx }: UpdateOptions) => {
         },
       },
     },
+  });
+
+  const webhookData = {
+    id: schedule.id,
+    userId: schedule.userId,
+    name: schedule.name,
+    timeZone: schedule.timeZone,
+    // @ts-ignore
+    availability: JSON.stringify(schedule?.availability ?? []),
+  };
+  await handleGimpedWebhookTrigger({
+    eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
+    webhookData,
   });
 
   const userAvailability = convertScheduleToAvailability(schedule);

@@ -3,6 +3,8 @@ import type { z } from "zod";
 
 import { HttpError } from "@calcom/lib/http-error";
 import { defaultResponder } from "@calcom/lib/server";
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
+import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import { schemaSchedulePublic, schemaSingleScheduleBodyParams } from "~/lib/validations/schedule";
 import { schemaQueryIdParseInt } from "~/lib/validations/shared/queryIdTransformParseInt";
@@ -86,6 +88,18 @@ export async function patchHandler(req: NextApiRequest) {
   const data = schemaSingleScheduleBodyParams.parse(req.body);
   await checkPermissions(req, data);
   const result = await prisma.schedule.update({ where: { id }, data, include: { availability: true } });
+  const webhookData = {
+    id: result.id,
+    userId: result.userId,
+    name: result.name,
+    timeZone: result.timeZone,
+    // @ts-ignore
+    availability: JSON.stringify(result?.availability ?? []),
+  };
+  await handleGimpedWebhookTrigger({
+    eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
+    webhookData,
+  });
   return { schedule: schemaSchedulePublic.parse(result) };
 }
 

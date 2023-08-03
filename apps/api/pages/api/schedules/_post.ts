@@ -118,14 +118,12 @@ async function postHandler(req: NextApiRequest) {
   });
 
   const webhookData = {
-    id: null,
-    user: null,
+    id: data.id,
     userId: data.userId,
-    eventType: null,
     name: data.name,
     timeZone: data.timeZone,
-    availability: null,
-    data: JSON.stringify(data),
+    // @ts-ignore
+    availability: JSON.stringify(data?.availability ?? []),
   };
   await handleGimpedWebhookTrigger({
     eventTrigger: WebhookTriggerEvents.BOOKING_PAID,

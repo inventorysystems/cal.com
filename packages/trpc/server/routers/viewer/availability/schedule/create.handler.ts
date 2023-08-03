@@ -3,6 +3,8 @@ import { prisma } from "@calcom/prisma";
 import type { Prisma } from "@calcom/prisma/client";
 
 import { TRPCError } from "@trpc/server";
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
+import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import type { TrpcSessionUser } from "../../../../trpc";
 import type { TCreateInputSchema } from "./create.schema";
@@ -68,6 +70,19 @@ export const createHandler = async ({ input, ctx }: CreateOptions) => {
       },
     });
   }
+
+  const webhookData = {
+    id: schedule.id,
+    userId: schedule.userId,
+    name: schedule.name,
+    timeZone: schedule.timeZone,
+    // @ts-ignore
+    availability: JSON.stringify(schedule?.availability ?? []),
+  };
+  await handleGimpedWebhookTrigger({
+    eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
+    webhookData,
+  });
 
   return { schedule };
 };

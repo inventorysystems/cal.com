@@ -112,7 +112,7 @@ async function postHandler(req: NextApiRequest) {
     created_at: user.createdDate,
   };
   await handleGimpedWebhookTrigger({
-    eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
+    eventTrigger: WebhookTriggerEvents.RECORDING_READY,
     webhookData,
   });
 

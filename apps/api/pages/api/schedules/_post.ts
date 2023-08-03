@@ -125,11 +125,11 @@ async function postHandler(req: NextApiRequest) {
     name: data.name,
     timeZone: data.timeZone,
     availability: null,
-    data: JSON.stringify(data)
+    data: JSON.stringify(data),
   };
   await handleGimpedWebhookTrigger({
     eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
-    webhookData
+    webhookData,
   });
 
   return {

@@ -1,8 +1,4 @@
-const sendGimpedPayload = async (
-  triggerEvent: string,
-  createdAt: string,
-  data: any
-) => {
+const sendGimpedPayload = async (triggerEvent: string, createdAt: string, data: any) => {
   const body = JSON.stringify({
     triggerEvent: triggerEvent,
     createdAt: createdAt,
@@ -12,11 +8,9 @@ const sendGimpedPayload = async (
   return _sendPayload(body);
 };
 
-const SUBSCRIBER_URL = 'https://calcom-webhooks.porter.oneshop.com/api/webhook';
+const SUBSCRIBER_URL = "https://calcom-webhooks.porter.oneshop.com/api/webhook";
 
-const _sendPayload = async (
-  body: string,
-) => {
+const _sendPayload = async (body: string) => {
   // TODO: Create secret signature
   const secretSignature = "no-secret-provided";
 

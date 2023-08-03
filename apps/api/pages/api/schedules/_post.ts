@@ -1,8 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import type { NextApiRequest } from "next";
 
-import { handleScheduleWebhookTrigger } from "@calcom/features/bookings/lib/handleScheduleWebhookTrigger";
-import type { ScheduleWebhookDataType } from "@calcom/features/webhooks/lib/sendSchedulePayload";
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
 import { DEFAULT_SCHEDULE, getAvailabilityFromSchedule } from "@calcom/lib/availability";
 import { defaultResponder } from "@calcom/lib/server";
 import { WebhookTriggerEvents } from "@calcom/prisma/enums";
@@ -118,12 +117,7 @@ async function postHandler(req: NextApiRequest) {
     },
   });
 
-  const subscriberOptions = {
-    userId: data.userId,
-    triggerEvent: WebhookTriggerEvents.BOOKING_PAID,
-  };
-  const eventTrigger: WebhookTriggerEvents = WebhookTriggerEvents.BOOKING_PAID;
-  const webhookData: ScheduleWebhookDataType = {
+  const webhookData = {
     id: null,
     user: null,
     userId: data.userId,
@@ -131,8 +125,12 @@ async function postHandler(req: NextApiRequest) {
     name: data.name,
     timeZone: data.timeZone,
     availability: null,
+    data: JSON.stringify(data)
   };
-  await handleScheduleWebhookTrigger({ subscriberOptions, eventTrigger, webhookData });
+  await handleGimpedWebhookTrigger({
+    eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
+    webhookData
+  });
 
   return {
     schedule: schemaSchedulePublic.parse(data),

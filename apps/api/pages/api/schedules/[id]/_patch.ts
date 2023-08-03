@@ -1,9 +1,9 @@
 import type { NextApiRequest } from "next";
 import type { z } from "zod";
 
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
 import { HttpError } from "@calcom/lib/http-error";
 import { defaultResponder } from "@calcom/lib/server";
-import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
 import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import { schemaSchedulePublic, schemaSingleScheduleBodyParams } from "~/lib/validations/schedule";

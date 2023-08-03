@@ -1,10 +1,10 @@
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
 import { DEFAULT_SCHEDULE, getAvailabilityFromSchedule } from "@calcom/lib/availability";
 import { prisma } from "@calcom/prisma";
 import type { Prisma } from "@calcom/prisma/client";
+import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import { TRPCError } from "@trpc/server";
-import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
-import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import type { TrpcSessionUser } from "../../../../trpc";
 import type { TCreateInputSchema } from "./create.schema";

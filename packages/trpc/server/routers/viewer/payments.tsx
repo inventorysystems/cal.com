@@ -117,25 +117,25 @@ export const paymentsRouter = router({
           throw new TRPCError({ code: "NOT_FOUND", message: `Could not generate payment data` });
         }
 
-        const subscriberOptions = {
-          userId: ctx.user.id || 0,
-          eventTypeId: booking.eventTypeId || 0,
-          triggerEvent: WebhookTriggerEvents.BOOKING_PAID,
-        };
+        // const subscriberOptions = {
+        //   userId: ctx.user.id || 0,
+        //   eventTypeId: booking.eventTypeId || 0,
+        //   triggerEvent: WebhookTriggerEvents.BOOKING_PAID,
+        // };
 
-        const subscribers = await getWebhooks(subscriberOptions);
+        // const subscribers = await getWebhooks(subscriberOptions);
 
-        await Promise.all(
-          subscribers.map(async (subscriber) => {
-            sendPayload(subscriber.secret, WebhookTriggerEvents.BOOKING_PAID, {
-              ...evt,
-              bookingId: booking.id,
-              paymentId: payment.id,
-              paymentData,
-              eventTypeId: subscriberOptions.eventTypeId,
-            });
-          })
-        );
+        // await Promise.all(
+        //   subscribers.map(async (subscriber) => {
+        //     sendPayload(subscriber.secret, WebhookTriggerEvents.BOOKING_PAID, {
+        //       ...evt,
+        //       bookingId: booking.id,
+        //       paymentId: payment.id,
+        //       paymentData,
+        //       eventTypeId: subscriberOptions.eventTypeId,
+        //     });
+        //   })
+        // );
 
         await sendNoShowFeeChargedEmail(attendeesListPromises[0], evt);
 

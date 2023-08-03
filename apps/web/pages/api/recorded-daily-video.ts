@@ -36,25 +36,25 @@ const triggerWebhook = async ({
     teamId?: number | null;
   };
 }) => {
-  const eventTrigger: WebhookTriggerEvents = "RECORDING_READY";
-  // Send Webhook call if hooked to BOOKING.RECORDING_READY
-  const subscriberOptions = {
-    userId: booking.userId,
-    eventTypeId: booking.eventTypeId,
-    triggerEvent: eventTrigger,
-    teamId: booking.teamId,
-  };
-  const webhooks = await getWebhooks(subscriberOptions);
+  // const eventTrigger: WebhookTriggerEvents = "RECORDING_READY";
+  // // Send Webhook call if hooked to BOOKING.RECORDING_READY
+  // const subscriberOptions = {
+  //   userId: booking.userId,
+  //   eventTypeId: booking.eventTypeId,
+  //   triggerEvent: eventTrigger,
+  //   teamId: booking.teamId,
+  // };
+  // const webhooks = await getWebhooks(subscriberOptions);
 
-  const promises = webhooks.map((webhook) =>
-    sendPayload(webhook.secret, eventTrigger, new Date().toISOString(), webhook, {
-      ...evt,
-      downloadLink,
-    }).catch((e) => {
-      console.error(`Error executing webhook for event: ${eventTrigger}, URL: ${webhook.subscriberUrl}`, e);
-    })
-  );
-  await Promise.all(promises);
+  // const promises = webhooks.map((webhook) =>
+  //   sendPayload(webhook.secret, eventTrigger, new Date().toISOString(), webhook, {
+  //     ...evt,
+  //     downloadLink,
+  //   }).catch((e) => {
+  //     console.error(`Error executing webhook for event: ${eventTrigger}, URL: ${webhook.subscriberUrl}`, e);
+  //   })
+  // );
+  // await Promise.all(promises);
 };
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {

@@ -1,9 +1,9 @@
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
 import { getAvailabilityFromSchedule } from "@calcom/lib/availability";
 import { prisma } from "@calcom/prisma";
+import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import { TRPCError } from "@trpc/server";
-import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
-import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import type { TrpcSessionUser } from "../../../../trpc";
 import { convertScheduleToAvailability, setupDefaultSchedule } from "../util";

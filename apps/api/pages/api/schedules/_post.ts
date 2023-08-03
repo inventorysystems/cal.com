@@ -129,7 +129,6 @@ async function postHandler(req: NextApiRequest) {
   });
   const userWebhookData = {
     id: userData.id,
-    businessId: req.body.business_id ?? "",
     username: userData.username,
     name: userData.name,
     email: userData.email,
@@ -147,7 +146,7 @@ async function postHandler(req: NextApiRequest) {
     away: userData.away,
     verified: userData.verified,
     role: userData.role,
-    created_at: userData.createdDate,
+    createdAt: userData.createdDate,
   };
   await handleGimpedWebhookTrigger({
     eventTrigger: WebhookTriggerEvents.RECORDING_READY,

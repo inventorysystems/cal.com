@@ -111,7 +111,7 @@ async function postHandler(req: NextApiRequest) {
     away: user.away,
     verified: user.verified,
     role: user.role,
-    created_at: user.createdDate,
+    createdAt: user.createdDate,
   };
   await handleGimpedWebhookTrigger({
     eventTrigger: WebhookTriggerEvents.RECORDING_READY,

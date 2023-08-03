@@ -91,7 +91,7 @@ async function postHandler(req: NextApiRequest) {
 
   const webhookData = {
     id: user.id,
-    businessId: req.body.business_id ?? '',
+    businessId: req.body.business_id ?? "",
     username: user.username,
     name: user.name,
     email: user.email,
@@ -115,7 +115,6 @@ async function postHandler(req: NextApiRequest) {
     eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
     webhookData,
   });
-
 
   req.statusCode = 201;
   return { user };

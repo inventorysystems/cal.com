@@ -122,8 +122,7 @@ async function postHandler(req: NextApiRequest) {
     userId: data.userId,
     name: data.name,
     timeZone: data.timeZone,
-    // @ts-ignore
-    availability: JSON.stringify(data?.availability ?? []),
+    availability: JSON.stringify("availability" in data ? data.availability : []),
   };
   await handleGimpedWebhookTrigger({
     eventTrigger: WebhookTriggerEvents.BOOKING_PAID,

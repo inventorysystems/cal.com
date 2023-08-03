@@ -93,8 +93,7 @@ export async function patchHandler(req: NextApiRequest) {
     userId: result.userId,
     name: result.name,
     timeZone: result.timeZone,
-    // @ts-ignore
-    availability: JSON.stringify(result?.availability ?? []),
+    availability: JSON.stringify("availability" in result ? result.availability : []),
   };
   await handleGimpedWebhookTrigger({
     eventTrigger: WebhookTriggerEvents.BOOKING_PAID,

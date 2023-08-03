@@ -1,7 +1,9 @@
 import type { NextApiRequest } from "next";
 
+import { handleGimpedWebhookTrigger } from "@calcom/features/webhooks/lib/handleGimpedWebhookTrigger";
 import { HttpError } from "@calcom/lib/http-error";
 import { defaultResponder } from "@calcom/lib/server";
+import { WebhookTriggerEvents } from "@calcom/prisma/enums";
 
 import { schemaUserCreateBodyParams } from "~/lib/validations/user";
 
@@ -86,6 +88,35 @@ async function postHandler(req: NextApiRequest) {
   if (!isAdmin) throw new HttpError({ statusCode: 401, message: "You are not authorized" });
   const data = await schemaUserCreateBodyParams.parseAsync(req.body);
   const user = await prisma.user.create({ data });
+
+  const webhookData = {
+    id: user.id,
+    businessId: req.body.business_id ?? '',
+    username: user.username,
+    name: user.name,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    bio: user.bio,
+    avatar: user.avatar,
+    timeZone: user.timeZone,
+    weekStart: user.weekStart,
+    endTime: user.endTime,
+    bufferTime: user.bufferTime,
+    defaultScheduleId: user.defaultScheduleId,
+    locale: user.locale,
+    timeFormat: user.timeFormat,
+    allowDynamicBooking: user.allowDynamicBooking,
+    away: user.away,
+    verified: user.verified,
+    role: user.role,
+    created_at: user.createdDate,
+  };
+  await handleGimpedWebhookTrigger({
+    eventTrigger: WebhookTriggerEvents.BOOKING_PAID,
+    webhookData,
+  });
+
+
   req.statusCode = 201;
   return { user };
 }
